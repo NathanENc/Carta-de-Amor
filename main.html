@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Romántica para Dayra</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            perspective: 1000px;
+            transition: all 1s ease;
+        }
+
+        .container.opened {
+            height: 500px;
+            transform: translateY(-100px);
+        }
+
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 300px;
+            cursor: pointer;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05) rotateY(5deg);
+        }
+
+        .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(142, 68, 173, 0.3);
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            border-radius: 10px 10px 0 0;
+            transform-origin: bottom;
+            transition: transform 0.8s ease;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px solid #7d3c98;
+        }
+
+        .envelope-left {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            left: 0;
+            border-radius: 10px 0 0 10px;
+            transform-origin: right center;
+            transition: transform 0.8s ease 0.2s;
+            z-index: 1;
+        }
+
+        .envelope-right {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            right: 0;
+            border-radius: 0 10px 10px 0;
+            transform-origin: left center;
+            transition: transform 0.8s ease 0.2s;
+            z-index: 1;
+        }
+
+        .envelope-bottom {
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            bottom: 0;
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            border-radius: 0 0 10px 10px;
+            transform-origin: top center;
+            transition: transform 0.8s ease 0.4s;
+            z-index: 1;
+        }
+
+        .envelope.opened .envelope-front {
+            transform: rotateX(-180deg);
+        }
+
+        .envelope.opened .envelope-left {
+            transform: rotateY(-90deg);
+        }
+
+        .envelope.opened .envelope-right {
+            transform: rotateY(90deg);
+        }
+
+        .envelope.opened .envelope-bottom {
+            transform: rotateX(90deg);
+        }
+
+        .envelope-decoration {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff69b4;
+            font-size: 20px;
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        .heart:nth-child(1) { top: 20px; left: 30px; animation-delay: 0s; }
+        .heart:nth-child(2) { top: 40px; right: 40px; animation-delay: 0.5s; }
+        .heart:nth-child(3) { bottom: 60px; left: 50px; animation-delay: 1s; }
+        .heart:nth-child(4) { bottom: 30px; right: 30px; animation-delay: 1.5s; }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .letter {
+            position: absolute;
+            width: 90%;
+            height: 400px;
+            top: 50%;
+            left: 5%;
+            background: linear-gradient(145deg, #ffeef8, #f8e8ff);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(142, 68, 173, 0.3);
+            opacity: 0;
+            transform: translateY(0) scale(0.9);
+            transition: all 1.2s ease 0.5s;
+            overflow-y: auto;
+            border: 2px solid #d7bde2;
+            z-index: 10;
+        }
+
+        .envelope.opened .letter {
+            opacity: 1;
+            transform: translateY(50px) scale(1);
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e8daef;
+        }
+
+        .date {
+            font-family: 'Dancing Script', cursive;
+            font-size: 18px;
+            color: #8e44ad;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 24px;
+            color: #7d3c98;
+            font-weight: 700;
+        }
+
+        .letter-content {
+            line-height: 1.6;
+            color: #5d4e75;
+            font-size: 14px;
+        }
+
+        .recipient {
+            font-family: 'Dancing Script', cursive;
+            font-size: 22px;
+            color: #8e44ad;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .signature {
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 20px;
+            color: #8e44ad;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .rose {
+            position: absolute;
+            font-size: 16px;
+            color: #ff69b4;
+            animation: sway 4s ease-in-out infinite;
+        }
+
+        .rose:nth-child(1) { top: 10px; left: 10px; animation-delay: 0s; }
+        .rose:nth-child(2) { top: 15px; right: 15px; animation-delay: 1s; }
+        .rose:nth-child(3) { bottom: 20px; left: 20px; animation-delay: 2s; }
+        .rose:nth-child(4) { bottom: 15px; right: 10px; animation-delay: 3s; }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff69b4;
+            border-radius: 50%;
+            animation: sparkle 2s linear infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            animation: pulse 2s ease-in-out infinite;
+            transition: opacity 0.5s ease;
+        }
+
+        .envelope.opened .click-hint {
+            opacity: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 350px;
+                height: 280px;
+            }
+            
+            .letter {
+                padding: 15px;
+                font-size: 13px;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+            
+            .recipient {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-back">
+                <div class="heart">💜</div>
+                <div class="heart">💖</div>
+                <div class="heart">💜</div>
+                <div class="heart">💕</div>
+            </div>
+            
+            <div class="envelope-left"></div>
+            <div class="envelope-right"></div>
+            <div class="envelope-bottom"></div>
+            
+            <div class="envelope-front">
+                <div class="envelope-decoration">💌</div>
+            </div>
+            
+            <div class="letter">
+                <div class="rose">🌹</div>
+                <div class="rose">🌹</div>
+                <div class="rose">🌹</div>
+                <div class="rose">🌹</div>
+                
+                <div class="letter-header">
+                    <div class="date">01/08/2025 - Feliz día de la novia</div>
+                    <div class="title">💜 Carta de Amor 💜</div>
+                </div>
+                
+                <div class="letter-content">
+                    <div class="recipient">Dayra</div>
+                    
+                    <div class="message">
+                        Hoy cumplimos dos años como novios.
+                        A veces me cuesta entenderte, expresarme bien contigo o reaccionar como debería… pero aun así, cada momento contigo ha sido un regalo.
+                        <br><br>
+                        Lo que más atesoro son nuestras llamadas por Discord, los mensajes diarios, y hasta esos apodos que te doy —porque aunque no lo parezca, son mi forma de decirte que te amo profundamente.
+                        <br><br>
+                        Nada de eso reemplaza un abrazo tuyo, y por eso cada noche sin ti se me hace larga. Pero también me recuerda cuánto deseo que estemos juntos de nuevo, abrazándonos en mi cama como tantas veces imaginamos.
+                        <br><br>
+                        Deseo verte siempre aunque me de flojera, o muchas veces trabaje o realizes cosas, intento de mi forma estar contigo aunque no lo parezca...
+                        Deseo estar contigo siempre
+                        <br><br>
+                        Gracias por seguir aquí conmigo.
+                    </div>
+                    
+                    <div class="signature">Te amo. 💜</div>
+                </div>
+            </div>
+            
+            <div class="click-hint">Haz clic para abrir 💜</div>
+        </div>
+    </div>
+
+    <script>
+        // Crear efectos de partículas brillantes
+        function createSparkles() {
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(sparkle);
+            }
+        }
+
+        // Función para abrir el sobre
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const container = document.querySelector('.container');
+            
+            envelope.classList.add('opened');
+            container.classList.add('opened');
+            
+            // Crear efecto de partículas al abrir
+            setTimeout(() => {
+                createSparkles();
+            }, 500);
+        }
+
+        // Event listener para el clic
+        document.getElementById('envelope').addEventListener('click', openEnvelope);
+
+        // Crear partículas iniciales
+        createSparkles();
+
+        // Recrear partículas cada 10 segundos
+        setInterval(createSparkles, 10000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969265171517fdf5',t:'MTc1NDE4ODI0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
